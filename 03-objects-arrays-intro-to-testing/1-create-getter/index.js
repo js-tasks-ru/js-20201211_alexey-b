@@ -4,8 +4,9 @@
  * @returns {function} - function-getter which allow get value from object by set path
  */
 export function createGetter(path) {
+    let arr = path.split(".");
    return function getNestedValue(obj) {
-        return path.split(".").reduce(function(result, key) {
+        return arr.reduce(function(result, key) {
             if (result === undefined) {
                 return undefined;
             }

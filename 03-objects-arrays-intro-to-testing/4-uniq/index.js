@@ -7,5 +7,5 @@ export function uniq(arr) {
     if (arr === undefined || arr.length === 0) {
         return [];
     }
-    return Array.from(new Set([...arr]));
+    return [...new Set(arr)]
 }
