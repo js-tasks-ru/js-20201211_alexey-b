@@ -4,5 +4,18 @@
  * @returns {object | undefined} - returns new object or undefined if nothing did't pass
  */
 export function invertObj(obj) {
+    if (obj === undefined) {
+        return undefined;
+    }
 
+    if (Object.keys(obj).length === 0) {
+        return {};
+    }
+    
+    let clone = {};
+    
+    for (const [key,value] of Object.entries(obj)) {
+        clone[value] = key;
+    }
+    return clone;
 }
