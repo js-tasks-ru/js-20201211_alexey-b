@@ -1,29 +1,34 @@
 export default class NotificationMessage {
-    openItems = [];
+    static openItems;
 
     constructor(message = 'default text', {
         duration = '',
         type = ''
     } = {}) {
 
+        if (NotificationMessage.openItems) {
+            NotificationMessage.openItems.remove();
+        }
+
         this.message = message;
         this.duration = duration;
         this.type = type;
         this.render();
+
     }
 
     render() {
         const element = document.createElement('div');
         element.innerHTML = this.notificationBody;
         this.element = element.firstElementChild;
-        this.openItems.push(this.element)
+        NotificationMessage.openItems = this.element;
     }
 
     show(target) {
 
-        document.querySelectorAll('.notification').forEach(e => e.parentNode.removeChild(e));
-        //this.openItems.forEach(e => e.parentNode.removeChild(e));   //не могу добиться чтобы это работало
-    
+        //document.querySelectorAll('.notification').forEach(e => e.parentNode.removeChild(e));
+        // NotificationMessage.openItems.forEach(e => e.parentNode.removeChild(e));   //не могу добиться чтобы это работало
+
         if (target) {
             target.appendChild(this.element);
         }
@@ -52,5 +57,6 @@ export default class NotificationMessage {
 
     destroy() {
         this.remove();
+        NotificationMessage.openItems = null;
     }
 }
