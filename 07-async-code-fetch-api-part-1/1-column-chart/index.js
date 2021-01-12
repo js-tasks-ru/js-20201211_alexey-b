@@ -8,20 +8,22 @@ export default class ColumnChart {
         data = [],
         label = '',
         link = '',
-        value = 0
+        value = 0,
+        url
     } = {}) {
 
         this.data = data;
         this.label = label;
         this.link = link;
         this.value = value;
-        this.url = new URL('https://course-js.javascript.ru/api/dashboard/orders');
+        this.url = url;
+        this.target =  new URL('https://course-js.javascript.ru/' + this.url);
         this.render();
     }
 
-    //[ 30, 40, 20, 80, 35, 15 ];
+
     getColumnBody(data) {
-        console.log("2222222", data)
+
         const maxValue = Math.max(...data);
         const scale = this.chartHeight / maxValue;
     
@@ -39,7 +41,6 @@ export default class ColumnChart {
       }
 
       get template() {
-          console.log("3333", this.getColumnBody(this.data))
         return `
           <div class="column-chart column-chart_loading" style="--chart-height: ${this.chartHeight}">
             <div class="column-chart__title">
@@ -83,17 +84,12 @@ export default class ColumnChart {
       }
 
     async update(from = new Date(), to = new Date()) {
-        console.log("URL", this.url)
-        this.url.searchParams.set("from", from);
-        this.url.searchParams.set("to", to);
+
+        this.target.searchParams.set("from", from);
+        this.target.searchParams.set("to", to);
        
-        let promise = fetchJson(this.url);
-        const result = await promise;
-        console.log(result);
-        console.log(Object.values(result))
+        const result = await fetchJson(this.target);
         this.data = Object.values(result);
-        console.log(" DATA = ",this.data)
-      
         this.render();
     }
 
@@ -104,7 +100,7 @@ export default class ColumnChart {
 
     destroy() {
         this.remove();
-        // NOTE: удаляем обработчики событий, если они есть
+ 
     }
 
 }
