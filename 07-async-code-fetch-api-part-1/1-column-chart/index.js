@@ -3,22 +3,36 @@ import fetchJson from './utils/fetch-json.js';
 export default class ColumnChart {
     chartHeight = 50;
     subElements = {};
+    data;
 
+
+//     url: 'api/dashboard/orders',
+//     range: {
+//       from: new Date('2020-04-06'),
+//       to: new Date('2020-05-06'),
+//     },
+//     label: 'orders',
+//     link: '#'
+//   });
     constructor({
-        data = [],
+        url,
+        range = {},
         label = '',
         link = '',
-        value = 0,
-        url
+        
+        
     } = {}) {
 
-        this.data = data;
+        this.url = url;
+        this.range = range;
+    
         this.label = label;
         this.link = link;
-        this.value = value;
-        this.url = url;
+        
         this.target =  new URL('https://course-js.javascript.ru/' + this.url);
-        this.render();
+        console.log("target", this.target)
+        this.data = {}
+        // this.render();
     }
 
 
@@ -85,11 +99,12 @@ export default class ColumnChart {
 
     async update(from = new Date(), to = new Date()) {
 
-        this.target.searchParams.set("from", from);
-        this.target.searchParams.set("to", to);
+        this.target.searchParams.set("from", this.range.from);
+        this.target.searchParams.set("to", this.range.to);
        
         const result = await fetchJson(this.target);
         this.data = Object.values(result);
+        console.log('data', this.data)
         this.render();
     }
 
